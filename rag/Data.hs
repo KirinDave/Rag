@@ -1,7 +1,4 @@
-module Data.Rag where
-
-import Data.List
-import Data.Map
+module Rag.Data where
 
 data Outcome = Action { name   :: String, 
                         output :: String}
