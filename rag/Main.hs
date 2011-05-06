@@ -1,24 +1,25 @@
 module Rag.Main where
 import Rag.Data
-import Rag.Parser
+import Data.String.Utils (strip)
+import qualified Data.List as List
+import qualified Text.ParserCombinators.Parsec as Parsec
+import qualified Data.IntMap as Map (IntMap, insert, empty, lookup, (!)) 
 
-import Text.ParserCombinators.Parsec
-import qualified Data.Map as Map
-import Data.Monoid
+type GameState      = (Int, MazeDefinition)
 
-type MazeDefinition = Map.Map Int Room
+playMaze :: GameState -> IO GameState
+playMaze gs@(room, maze) = do
+  putStr "> " 
+  command <- strip `fmap` getLine
+  let currentRoom         = maze `getRoom` room
+      anOutcome           = currentRoom >>= findOutcome command
+      (messag, newState) = resultOf anOutcome gs in
+    do putStrLn message
+       playMaze newState
+       
 
-parseFile :: String -> IO [(Int, Room)]
-parseFile fileName = do
-  dat <- readFile fileName
-  case parse ragFile fileName dat of
-    Left why -> do putStrLn $ show why
-                   return []
-    Right xs -> return xs
-
-buildMaze :: String -> IO MazeDefinition
-buildMaze fileName = do
-  dat         <- readFile fileName
-  pairs       <- parseFile dat
-  return $ foldr (uncurry Map.insert) Map.empty pairs
   
+mazeLoop :: GameState -> IO GameState
+mazeLoop state@(room, maze) = do
+  putStr "> "
+  command <- strip `fmap` getLine
