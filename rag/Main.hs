@@ -13,7 +13,7 @@ playMaze gs@(room, maze) = do
   command <- strip `fmap` getLine
   let currentRoom         = maze `getRoom` room
       anOutcome           = currentRoom >>= findOutcome command
-      (messag, newState) = resultOf anOutcome gs in
+      (message, newState) = resultOf anOutcome gs in
     do putStrLn message
        playMaze newState
        
@@ -23,3 +23,9 @@ mazeLoop :: GameState -> IO GameState
 mazeLoop state@(room, maze) = do
   putStr "> "
   command <- strip `fmap` getLine
+  let (messages, newState) = runCommand command room maze in
+    mapM_ putStrLn messages >> mazeLoop $ return newState
+    
+    
+runCommand :: Room -> Maze -> String -> ([String], GameState)    
+runCommand r m = undefined
