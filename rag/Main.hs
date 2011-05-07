@@ -16,16 +16,16 @@ mazeLoop state@(r,md) = do
     ":quit"    -> do putStrLn "Thank you very much!"
                      return state
     otherwise  -> 
-      let (state, messages) = doCmd command state in
+      let (messages, state) = doCmd command state in
       do mapM_ putStrLn messages 
          mazeLoop state
 
-doCmd :: String -> GameState -> (GameState, [String])   
-doCmd "look" s@(room,_) = (s, [describeRoom room])
+doCmd :: String -> GameState -> ([String], GameState)   
+doCmd "look" s@(room,_) = ([describeRoom room], s)
 doCmd command state@(room,_) = 
   case List.find ((command ==) . name) (outcomes room) of
-    Just o -> execState (runWriterT (handleOutcome o)) state
-    Nothing -> (state, ["I don't understand."])
+    Just o -> runState (execWriterT (handleOutcome o)) state    
+    Nothing -> (["I don't understand."], state)
 
 
 getRoom :: Handler Room

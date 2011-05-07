@@ -5,5 +5,8 @@ import Control.Monad.Writer
 import Data.IntMap (IntMap) 
 
 type GameState      = (Room, MazeDefinition)
-type Handler = WriterT [String] (State GameState)
 type MazeDefinition = IntMap Room
+
+type Handler = WriterT [String] (State GameState)
+
+runHandler th state = runState (execWriterT th) state
