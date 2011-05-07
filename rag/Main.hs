@@ -1,31 +1,58 @@
 module Rag.Main where
 import Rag.Data
-import Data.String.Utils (strip)
+import Rag.Types
+import qualified Data.String.Utils as U (strip, join)
 import qualified Data.List as List
-import qualified Text.ParserCombinators.Parsec as Parsec
+import Data.Maybe (fromJust)
+import Control.Applicative
+import Control.Monad.Reader
+import Control.Monad.Writer 
 import qualified Data.IntMap as Map (IntMap, insert, empty, lookup, (!)) 
-
-type GameState      = (Int, MazeDefinition)
-
-playMaze :: GameState -> IO GameState
-playMaze gs@(room, maze) = do
-  putStr "> " 
-  command <- strip `fmap` getLine
-  let currentRoom         = maze `getRoom` room
-      anOutcome           = currentRoom >>= findOutcome command
-      (message, newState) = resultOf anOutcome gs in
-    do putStrLn message
-       playMaze newState
-       
-
   
 mazeLoop :: GameState -> IO GameState
-mazeLoop state@(room, maze) = do
+mazeLoop state@(r,md) = do
   putStr "> "
-  command <- strip `fmap` getLine
-  let (messages, newState) = runCommand command room maze in
-    mapM_ putStrLn messages >> mazeLoop $ return newState
-    
-    
-runCommand :: Room -> Maze -> String -> ([String], GameState)    
-runCommand r m = undefined
+  command <- U.strip `fmap` getLine ; putStrLn ""
+  case command of
+    "look"  -> do putStrLn $ describeRoom r
+                  mazeLoop state
+    ":quit" -> do putStrLn "Thank you very much!"
+                  return state
+    _       -> 
+      let (newRoom, messages) = doCmd command state in
+      do mapM_ putStrLn messages 
+         mazeLoop (newRoom,md)
+
+doCmd :: String -> GameState -> (Room, [String])    
+doCmd command state@(room,_) = 
+    runReader (runWriterT (handleOutcome o)) state 
+    where fn = List.find ((command ==) . name) 
+          o = fn (outcomes room) 
+
+getRoom :: Handler Room
+getRoom = ask >>= return . fst
+
+getMaze :: Handler MazeDefinition
+getMaze = do state <- ask
+             return (snd state)
+stayPut = getRoom
+
+handleOutcome :: Maybe Outcome -> Handler Room
+handleOutcome Nothing = do
+  tell ["I don't understand!"]
+  stayPut  
+
+handleOutcome (Just (Action n r)) = 
+  tell [r] >> stayPut
+
+handleOutcome (Just (Edge _ dest _)) = do
+  maze <- getMaze
+  let newRoom = fromJust $ Map.lookup dest maze `mplus` 
+                           Just defaultRoomDefinition
+  tell [describeRoom newRoom]
+  return newRoom
+  
+defaultRoomDefinition = Room { title = "The Void",
+                               desc  = "You are in the void. The creator has erred deeply.",
+                               outcomes = [(Edge "start" 1 False)]}
+                        

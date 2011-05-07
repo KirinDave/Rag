@@ -1,7 +1,10 @@
-module Rag.Parser (parseFile) where
-import Text.ParserCombinators.Parsec
+module Rag.Parser where
 import Rag.Data
+import Rag.Types
+import Text.ParserCombinators.Parsec
 import Control.Monad (liftM)
+import qualified Data.IntMap as Map (insert, empty)
+
 
 exLine = "2|The Center of the Maze|A fountain quietly burbles in the center of this maze, housed by a belltower. A gentle breeze rustles the hedges surrounding you. A thick velvet rope hangs down from the belltower, swaying softly.|north=1|south=3|pull rope=A deep gonging sound can be heard. There is a sound of mechanical action beneath your feet, and the hedge to the south ripples and shuffles like a door has opened behind it. (You can go south from here).\\dance=You dance quietly while no one can see you.\n"
 
@@ -12,15 +15,19 @@ parseFile :: String -> IO MazeDefinition
 parseFile fileName = do
   dat <- readFile fileName
   case parse ragFile fileName dat of
-    Left why -> do print why ; return []
-    Right xs -> return $ buildMaze xs ++ defaultRoomDefinition
-
+    Left why -> do print why ; return $ buildMaze []
+    Right xs -> return $ buildMaze xs
+    
 buildMaze :: [(Int, Room)] -> MazeDefinition
 buildMaze = foldr (uncurry Map.insert) Map.empty 
 
+
+
 -- Parser
 
-ragFile = ragLine `sepBy` newline 
+ragFile = do 
+  results <- ragLine `sepBy` (many newline) ; eof
+  return results
 
 ragLine :: GenParser Char st (Int, Room)
 ragLine = do 
@@ -30,7 +37,7 @@ ragLine = do
   visibleEdges <- edges False ; char '|'
   hiddenEdges <- edges True ; char '|'
   verbs <- actions
-  return  (id, Room title desc (visibleEdges ++ hiddenEdges) verbs)  
+  return  (id, Room title desc (visibleEdges ++ hiddenEdges ++verbs))
 
 cellContent :: GenParser Char st String
 cellContent = many (noneOf "|\n")
@@ -48,8 +55,8 @@ actions :: GenParser Char st [Outcome]
 actions = actionDef `sepBy` char '\\'
                              
 actionDef = do
-  name   <- many (noneOf "=") ; char '='
-  result <- many (noneOf "\\")
+  name   <- many (noneOf "=\n") ; char '='
+  result <- many (noneOf "\\\n")
   return $ Action name result
                        
 num :: GenParser Char st Int
