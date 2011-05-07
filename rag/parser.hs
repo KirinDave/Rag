@@ -26,7 +26,7 @@ buildMaze = foldr (uncurry Map.insert) Map.empty
 -- Parser
 
 ragFile = do 
-  results <- ragLine `sepBy` (many newline) ; eof
+  results <- ragLine `sepEndBy` (many newline) 
   return results
 
 ragLine :: GenParser Char st (Int, Room)

@@ -3,7 +3,7 @@ import Rag.Data
 import Rag.Types
 import qualified Data.String.Utils as U (strip, join)
 import qualified Data.List as List
-import Data.Maybe (fromJust)
+import Data.Maybe (fromMaybe)
 import Control.Applicative
 import Control.Monad.Reader
 import Control.Monad.Writer 
@@ -47,10 +47,10 @@ handleOutcome (Just (Action n r)) =
 
 handleOutcome (Just (Edge _ dest _)) = do
   maze <- getMaze
-  let newRoom = fromJust $ Map.lookup dest maze `mplus` 
-                           Just defaultRoomDefinition
-  tell [describeRoom newRoom]
-  return newRoom
+  let newRoom = fromMaybe defaultRoomDefinition 
+                          (Map.lookup dest maze) in do
+    tell [describeRoom newRoom]
+    return newRoom
   
 defaultRoomDefinition = Room { title = "The Void",
                                desc  = "You are in the void. The creator has erred deeply.",
