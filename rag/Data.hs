@@ -24,5 +24,3 @@ describeRoom r =
   title r ++ "\n" ++
   desc  r ++ "\n" ++
   "Exits: " ++ (join ", " . map name $ exits r)
-
-
