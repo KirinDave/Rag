@@ -78,8 +78,9 @@ So what might the file look like for this little adventure? The RAG file is simp
 You can probably figure it out, but let's document this carefully. Each room is made up of 6 fields separated by 5 |'s. Any of these fields can be blank. Some of the fields are complicated, but the first 3 are simple: id | Room Title | Room Description. Note that no newlines are allowed! One room per line. The next field is a little trickier, it's the visible exits for the room, which consists of a comma-separated list visible exists, done where = denotes the relationship. The next field after that is identical, but instead denotes hidden exits. The last field is the most complicated, it's the list of "free actions" in the room. For example, when we pull the rope in the center of the maze, it looks up the "pull rope" field and displays that text. Multiple actions are separated by backslashes.
 
 Laying this out visually:
-
-```id | room name | room description | exits | hidden exists | free actions```
+```
+id | room name | room description | exits | hidden exists | free actions
+```
 
 id = any number. The game starts in room #1.
 room name = The name of the room. WIll be displayed.
