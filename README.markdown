@@ -58,12 +58,12 @@ The output should look like this (normal text is what the computer writes, bold 
 	... 
 
 From looking at this output, one might notice a few things right away:
-	- It's obvious that there are rooms.
-	- I can "look" in these rooms to repeat the description.
-	- I can type in random garbage and the program should tell us it doesn't understand.
-	- I can type in the name of an exit and move that way to a new room.
-	- Some rooms have hidden exits that don't show up
-	- Some rooms have special commands the player can type to get more instructions.
+* It's obvious that there are rooms.
+* I can "look" in these rooms to repeat the description.
+* I can type in random garbage and the program should tell us it doesn't understand.
+* I can type in the name of an exit and move that way to a new room.
+* Some rooms have hidden exits that don't show up
+* Some rooms have special commands the player can type to get more instructions.
 
 SPAM adventures don't have things that you might expect if you played Zork. The player has no inventory, it doesn't track what you'reholding or what you can use. The world doesn't have doors or bridges (we might say it is "static", once loaded it never changes). Only the player's knowledge of the world changes. In this way, it's a lot like a book. 
 
