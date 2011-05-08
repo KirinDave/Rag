@@ -90,6 +90,7 @@ hidden exits = Like exits, but the game will not display these exits.
 free actions = A list of backslash separated free actions, string = action text. Actions may contain = signs, but not backslashes.
 
 This should be enough to get someone following along. Get your program to run this maze, and then consider adding one of the following features:
+
 * Try to word-wrap the description so it fits in an 80 character wide terminal.
 * Some terminal colors would look pretty sweet.
 * Make it so that you can reload the maze while you are in it! This is great for making new mazes. (Hint: What happens if an exit leads to a room that doesn't exist?)
