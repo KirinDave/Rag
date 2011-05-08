@@ -42,13 +42,17 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 
 
-Executable Rag
+Executable rag-game
   -- .hs or .lhs file containing the Main module.
-    Main-is: 	     Rag.hs
+    Main-is: 	     Main.hs
   
   -- Packages needed in order to build this package.
   Build-depends:     base >= 3 && < 5,
-                     readline >= 1
+                     readline >= 1,
+                     containers,
+                     parsec >= 3,
+                     mtl >= 2,
+                     MissingH >= 1.1
 
   Hs-Source-Dirs:    src
   -- Modules not exported by this package.

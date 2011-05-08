@@ -1,4 +1,4 @@
-module Rag where
+module Main where
 import Rag.Game
 import Rag.Parser
 import System.Environment (getArgs)
