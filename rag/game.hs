@@ -16,7 +16,7 @@ startMaze mazeDef =
 
 mazeLoop :: [String] -> GameState -> IO GameState
 mazeLoop messages state@(r,md) = do
-  mapM_ putStrLn messages
+  mapM_ putStrLn messages ; putStrLn ""
   maybeLine <- readline "> "
   -- command <- U.strip `fmap` getLine ; putStrLn ""
   case maybeLine of
