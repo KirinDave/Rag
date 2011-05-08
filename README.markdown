@@ -58,6 +58,7 @@ The output should look like this (normal text is what the computer writes, bold 
 	... 
 
 From looking at this output, one might notice a few things right away:
+
 * It's obvious that there are rooms.
 * I can "look" in these rooms to repeat the description.
 * I can type in random garbage and the program should tell us it doesn't understand.
