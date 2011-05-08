@@ -10,18 +10,21 @@ parseRagFile :: String -> IO MazeDefinition
 parseRagFile fileName = do
   dat <- readFile fileName
   case parse ragFile fileName dat of
-    Left why -> do print why ; return $ buildMaze []
-    Right xs -> return $ buildMaze xs
+    Left why -> do 
+      putStrLn "----\nParse failed! Error:"
+      putStrLn (show why)
+      putStrLn "----\n"
+      fail "No maze."
+    Right xs -> do
+      return $ buildMaze xs
     
 buildMaze :: [(Int, Room)] -> MazeDefinition
 buildMaze = foldr (uncurry Map.insert) Map.empty 
 
 
 -- Parser
-
-ragFile = do 
-  results <- ragLine `sepEndBy` (many newline) 
-  return results
+            
+ragFile = ragLine `sepEndBy1` newline 
 
 ragLine :: GenParser Char st (Int, Room)
 ragLine = do 
