@@ -69,8 +69,11 @@ SPAM adventures don't have things that you might expect if you played Zork. The 
 
 So what might the file look like for this little adventure? The RAG file is simple. Here's an example of what the adventure above might look like:
 
-```1|A Maze|You are in the center of a maze.|south=2,east=2||
+```
+1|A Maze|You are in the center of a maze.|south=2,east=2||
+
 2|The Center of the Maze|A fountain quietly burbles in the center of this maze, housed by a belltower. A gentle breeze rustles the hedges surrounding you. A thick velvet rope hangs down from the belltower, swaying softly.|north=1|south=3|pull rope=A deep gonging sound can be heard. There is a sound of mechanical action beneath your feet, and the hedge to the south ripples and shuffles like a door has opened behind it. (You can go south from here).\dance=You dance quietly while no one can see you.
+
 3|The Real Center of the Maze|The wizard's tower stands here, forboding. Its dark stone buttresses crowd back the hedges of the maze. Clouds gather about the top of its spiraling reach. There is a door in front of you, slightly ajar.|north=2,door=4||```
 
 You can probably figure it out, but let's document this carefully. Each room is made up of 6 fields separated by 5 |'s. Any of these fields can be blank. Some of the fields are complicated, but the first 3 are simple: id | Room Title | Room Description. Note that no newlines are allowed! One room per line. The next field is a little trickier, it's the visible exits for the room, which consists of a comma-separated list visible exists, done where = denotes the relationship. The next field after that is identical, but instead denotes hidden exits. The last field is the most complicated, it's the list of "free actions" in the room. For example, when we pull the rope in the center of the maze, it looks up the "pull rope" field and displays that text. Multiple actions are separated by backslashes.
