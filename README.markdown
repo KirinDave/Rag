@@ -89,7 +89,7 @@ exits = A comma-separated list of name = number where the number is an ID for an
 hidden exits = Like exits, but the game will not display these exits.
 free actions = A list of backslash separated free actions, string = action text. Actions may contain = signs, but not backslashes.
 
-This should be enough to get someone following along. Get your program to run this maze, and then consider adding one of the following features:
+This should be enough to get someone to where they could follow along. If you're going to try implementing it, here are some other considerations for the program.
 
 * Try to word-wrap the description so it fits in an 80 character wide terminal.
 * Some terminal colors would look pretty sweet.
