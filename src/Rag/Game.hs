@@ -16,7 +16,8 @@ startMaze mazeDef =
 
 mazeLoop :: [String] -> GameState -> IO GameState
 mazeLoop messages state@(r,md) = do
-  mapM_ putStrLn messages ; putStrLn ""
+  mapM_ putStrLn $ wrap messages 
+  putStrLn ""
   maybeLine <- readline "> "
   -- command <- U.strip `fmap` getLine ; putStrLn ""
   case maybeLine of
@@ -44,3 +45,10 @@ errorRoom = Room { title = "The Void",
                    desc  = "You are in the void. The creator has erred deeply.",
                    outcomes = [(Edge "start" 1 False)]}
                         
+wrap =  (>>= wrapToLines 80)
+wrapToLines :: Int -> String -> [String]
+wrapToLines n = wrap' n . words where
+  lengths    = tail . scanl (\x s -> x + length s + 1) (-1)
+  numToTake  = max 1 . length . takeWhile (<= n) . lengths
+  wrap' _ [] = []
+  wrap' n ss = let (b, e) = splitAt (numToTake ss) ss in unwords b : wrap' n e

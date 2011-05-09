@@ -1,5 +1,4 @@
-module Rag.Types (Handler, GameState, MazeDefinition, 
-                  runHandler, lookupRoom, getRoom, getMaze, goto) where
+module Rag.Types where
 import Rag.Data
 import Control.Monad.State
 import Control.Monad.Writer
@@ -22,6 +21,6 @@ getRoom = do state <- get
 getMaze :: Handler MazeDefinition
 getMaze = do state <- get
              return (snd state)
+
 goto room = do maze <- getMaze
                put (room,maze)
-
