@@ -20,7 +20,7 @@ data Room = Room { title    :: String,
                    outcomes :: [Outcome]} deriving (Show, Eq)
 
 exits = filter isVisible . outcomes
-describeRoom r = 
-  title r ++ "\n" ++
-  desc  r ++ "\n" ++
-  "Exits: " ++ (join ", " . map name $ exits r)
+roomFields r = 
+  [title r, desc r, "Exits: " ++ (join ", " . map name $ exits r)]
+  
+describeRoom = unlines . roomFields

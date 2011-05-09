@@ -12,7 +12,7 @@ import qualified Data.IntMap as Map
 
 startMaze mazeDef = 
   let start = lookupRoom errorRoom 1 mazeDef 
-  in mazeLoop [(describeRoom start)] (start, mazeDef)
+  in mazeLoop (roomFields start) (start, mazeDef)
 
 mazeLoop :: [String] -> GameState -> IO GameState
 mazeLoop messages state@(r,md) = do
@@ -38,7 +38,7 @@ handleOutcome (Action n r) = tell [r]
 handleOutcome (Edge _ dest _) = do
   maze <- getMaze
   let newRoom = lookupRoom errorRoom dest maze in
-    do tell [describeRoom newRoom]
+    do tell (roomFields newRoom)
        goto newRoom
        
 errorRoom = Room { title = "The Void",
