@@ -16,13 +16,12 @@ startMaze mazeDef =
 
 mazeLoop :: [String] -> GameState -> IO ()
 mazeLoop messages state@(r,md) = do
-  mapM_ putStrLn $ wrap messages 
+  mapM_ putStrLn $ wrapLines messages 
   putStrLn ""
   maybeLine <- readline "> "
   case maybeLine of
-    Nothing         -> do return ()
-    Just ":quit"    -> do putStrLn "Thank you very much!"
-                          return ()
+    Nothing         -> return ()
+    Just ":quit"    -> putStrLn "Thank you very much!"
     Just cmd  -> uncurry mazeLoop $ doCmd cmd state
 
 doCmd :: String -> GameState -> ([String], GameState)   
@@ -44,7 +43,7 @@ errorRoom = Room { title = "The Void",
                    desc  = "You are in the void. The creator has erred deeply.",
                    outcomes = [(Edge "start" 1 False)]}
                         
-wrap =  (>>= wrapToLines 80)
+wrapLines =  (>>= wrapToLines 80)
 wrapToLines :: Int -> String -> [String]
 wrapToLines n = wrap' n . words where
   lengths    = tail . scanl (\x s -> x + length s + 1) (-1)

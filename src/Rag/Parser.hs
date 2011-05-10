@@ -57,4 +57,4 @@ actionDef = do
   return $ Action name result
                        
 num :: GenParser Char st Int
-num = liftM read (many digit)
+num = liftM read (many1 digit)
