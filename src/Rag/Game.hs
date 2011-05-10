@@ -14,16 +14,15 @@ startMaze mazeDef =
   let start = lookupRoom errorRoom 1 mazeDef 
   in mazeLoop (roomFields start) (start, mazeDef)
 
-mazeLoop :: [String] -> GameState -> IO GameState
+mazeLoop :: [String] -> GameState -> IO ()
 mazeLoop messages state@(r,md) = do
   mapM_ putStrLn $ wrap messages 
   putStrLn ""
   maybeLine <- readline "> "
-  -- command <- U.strip `fmap` getLine ; putStrLn ""
   case maybeLine of
-    Nothing         -> do return state
+    Nothing         -> do return ()
     Just ":quit"    -> do putStrLn "Thank you very much!"
-                          return state
+                          return ()
     Just cmd  -> uncurry mazeLoop $ doCmd cmd state
 
 doCmd :: String -> GameState -> ([String], GameState)   
